@@ -1,86 +1,37 @@
+import 'package:academy_pratica_f6/layouts/cadastro.dart';
+import 'package:academy_pratica_f6/layouts/editar_cadastro.dart';
 import 'package:flutter/material.dart';
+import 'layouts/home_page.dart';
+import 'layouts/lista_pessoas.dart';
+import 'package:provider/provider.dart';
+import './entities/pessoa.dart';
 
 const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
 void main() {
-  runApp(MyApp());
-}
-
-enum TipoSanguineo {
-  aPositivo,
-  aNegativo,
-  bPositivo,
-  bNegativo,
-  oPositivo,
-  oNegativo,
-  abPositivo,
-  abNegativo,
-}
-
-class Pessoa {
-  const Pessoa({
-    required this.nome,
-    required this.email,
-    required this.telefone,
-    required this.github,
-    required this.tipoSanguineo,
-  });
-
-  final String nome;
-  final String email;
-  final String telefone;
-  final String github;
-  final TipoSanguineo tipoSanguineo;
-
-  // todo: implementar equals e hashcode
-}
-
-class EstadoListaDePessoas with ChangeNotifier {
-  final _listaDePessoas = <Pessoa>[];
-
-  List<Pessoa> get pessoas => List.unmodifiable(_listaDePessoas);
-
-  void incluir(Pessoa pessoa) {
-    _listaDePessoas.add(pessoa);
-    notifyListeners();
-  }
-
-  void excluir(Pessoa pessoa) {
-    _listaDePessoas.remove(pessoa);
-    notifyListeners();
-  }
-
-  // todo: implementar metodos restantes
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => EstadoListaDePessoas(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: darkBlue,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(
-          child: MyWidget(),
-        ),
-      ),
-    );
-  }
-}
-
-class MyWidget extends StatefulWidget {
-  @override
-  State<MyWidget> createState() => _MyWidgetState();
-}
-
-class _MyWidgetState extends State<MyWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      'Hello, World!',
-      style: Theme.of(context).textTheme.headlineMedium,
+      theme: ThemeData.light(),
+      initialRoute: HomePage.routeName,
+      routes: {
+        HomePage.routeName: (context) => const HomePage(),
+        TelaDeCadastro.routeName: (context) => const TelaDeCadastro(),
+        TelaPessoasCadastradas.routeName: (context) =>
+            const TelaPessoasCadastradas(),
+        TelaEditarCadastro.routeName: (context) => const TelaEditarCadastro(),
+      },
     );
   }
 }
